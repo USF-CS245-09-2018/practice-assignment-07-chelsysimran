@@ -3,67 +3,112 @@ import java.util.*;
 public class ArrayList implements List
 {
 
-	private Object[] list;
-	private int size = list.length();
+	private Object[] list; //initializing an object array
+	private int size, length = 0;
 
 	public ArrayList()
 	{
-		list = new Object[10];
+		list = new Object[10]; //initializes the array with 10 spaces
+		length = list.length;
+
 	}
 
 	public void add(Object obj)
 	{
+
+		if (size == list.length) //if the list is full 
+		{
+			growArray(); //this doubles the size of the array
+		}
+
 		list[size] = obj;
 		size++;
 
 	}
 
-	public void add(int pos, Object obj)
+	public void add(int pos, Object obj) //at a certain position, you're adding an object.
 	{
+		if (pos < 0 || pos > list.length)
+		{
+            try 
+            {
+                throw new Exception("Invalid range");
+            }
+            catch (Exception e)
+            {
+                //do nothing
+            }
+        }
+		if (size == list.length) //if the list is full 
+		{
+			growArray(); //this doubles the size of the array
+		}
+
 		for(int i = size; i > pos; i--)
 		{
 			list[i] = list[i-1]; //shift everything down
-
 		}
-
-		list[pos] = obj; //place the element at the new specified destination
+		
 		size++; //increment the size
-
+		list[pos] = obj; //place the element at the new specified destination
+	
 	}
 	
 	public Object get(int pos)
 	{
-		for(int i = 0; i < size; i++)
+		if (pos < 0 || pos > list.length)
 		{
-			if(i == pos)
-			{
-				return list[i]; //returns the element at the position specified by the user
-			}
-		}
+            try 
+            {
+                throw new Exception("Invalid range");
+            }
+            catch (Exception e)
+            {
+                //do nothing
+            }
+        }
 
+        return list[pos];
 	}
 	
 	public Object remove(int pos)
 	{
-		for(int i = pos + 1; i < size; i++)
-		{
-			list[i-1] = list[i]; //shifting everything down one
-			size--; //decrement size, because you just took an element out
+		if (pos < 0 || pos > list.length)
+        {
+	        try 
+	        {
+	            throw new Exception("Invalid range");
+	        }
+	        
+	        catch (Exception e)
+	       	{
+	                //do nothing
+	        }
+        }
 
+        Object removed = list[pos];
+		for(int i = pos; i < size-1 ; i++)
+		{
+			list[i] = list[i + 1]; //shifting everything down one
 		}
 
+		size--;
+		return removed;
 
 	}
 	
-	public int size()
+	public int size() //returns the number of elements that are populating the array
 	{
-		return size;
 
-		Object[] newList = new Object[(list.length) * 2];		
+        return size; 
+	}
+
+	private void growArray()
+	{
+		Object[] newList = new Object[(list.length) * 2]; //doubling the size of the array 		
 		System.arraycopy(list, 0, newList, 0, list.length);
 		list = newList;
 
 	}
-
 	
 }
